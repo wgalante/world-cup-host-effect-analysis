@@ -4,18 +4,17 @@ db_utils.py
 Reusable helper functions to load the World Cup datasets into an in-memory
 SQLite database and run SQL queries against them with pandas.
 
-Three tables, spanning 1994-2026 (9 editions -- the span between the two
+Two tables, spanning 1994-2026 (9 editions -- the span between the two
 World Cups held in the USA): top scorers and their pre-tournament club form,
-per-team/per-confederation results, and documented naturalized-player cases.
-Compiled via Gemini Pro Deep Research and independently validated against
-primary sources before loading -- see README "Metodologia e Validação de
-Dados" for the correction log.
+and per-team/per-confederation results. Compiled via Gemini Pro Deep Research
+and independently validated against primary sources before loading -- see
+README "Metodologia e Validação de Dados" for the correction log.
 
 This module exists so the analysis notebook stays focused on SQL + insights
 instead of repeating boilerplate CSV/DB setup in every cell.
 
-Project: World Cup Data Analysis (1994-2026) -- 4 questions on scoring form,
-confederations, and naturalized players.
+Project: World Cup Data Analysis (1994-2026) -- 3 questions on scoring form
+and confederations.
 Course reference: IBM "Databases and SQL for Data Science with Python" (Coursera)
 """
 
@@ -32,7 +31,6 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 TABLES = {
     "TOP_SCORERS": DATA_DIR / "top_scorers_1994_2026.csv",
     "TEAM_RESULTS": DATA_DIR / "team_results_1994_2026.csv",
-    "NATURALIZED_PLAYERS": DATA_DIR / "naturalized_players_1994_2026.csv",
 }
 
 
@@ -45,8 +43,8 @@ def _sanitize_column(name: str) -> str:
 
 def get_connection(db_path: str = ":memory:") -> sqlite3.Connection:
     """
-    Create a SQLite connection and load all three World Cup datasets into it
-    as tables: TOP_SCORERS, TEAM_RESULTS, NATURALIZED_PLAYERS.
+    Create a SQLite connection and load both World Cup datasets into it
+    as tables: TOP_SCORERS, TEAM_RESULTS.
 
     Parameters
     ----------

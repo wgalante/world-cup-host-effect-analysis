@@ -1,4 +1,4 @@
-# World Cup Data Analysis (1994-2026): 4 Questions
+# World Cup Data Analysis (1994-2026): 3 Questions
 
 ![Project banner](assets/banner.png)
 
@@ -8,10 +8,10 @@
 ![Status](https://img.shields.io/badge/status-completed-brightgreen)
 ![Course](https://img.shields.io/badge/IBM-Databases%20%26%20SQL%20for%20Data%20Science-052FAD?logo=ibm&logoColor=white)
 
-A SQL + Python data analysis project asking four specific, less obvious questions
+A SQL + Python data analysis project asking three specific, less obvious questions
 about the last nine World Cups (1994-2026) — the span between the two tournaments
 held in the USA. No "does hosting help" here: this project skips the obvious question
-and goes after four things that are more interesting and less asked.
+and goes after things that are more interesting and less asked.
 
 Built on SQL techniques from IBM's **"Databases and SQL for Data Science with
 Python"** course (Coursera / IBM Data Science Professional Certificate), applied to
@@ -31,9 +31,9 @@ validated** against primary sources before use — see
 Kylian Mbappé finished the 2026 World Cup with a record-setting **10 goals** and the
 outright Golden Boot. His team, France, finished **fourth**. That split is not an
 exception — it is the rule: only **2 of 14** top-scorer/team pairs since 1994 ended in
-a championship. This project runs that finding, and three others like it, through SQL.
+a championship. This project runs that finding, and two others like it, through SQL.
 
-## The Four Questions
+## The Three Questions
 
 1. Does a World Cup top scorer's club form, right before the tournament, predict
    their scoring form at the Cup?
@@ -41,12 +41,10 @@ a championship. This project runs that finding, and three others like it, throug
 3. Africa (CAF) and Asia (AFC) have gained steadily more World Cup slots since
    1994 — did their *ceiling* (best result) grow at the same pace as their *volume*
    (number of slots)?
-4. Do naturalized players show up as a targeted fix for one specific position, or
-   as broad squad reinforcement?
 
 ## Datasets
 
-Three original CSV tables, compiled via Gemini Pro Deep Research and independently
+Two original CSV tables, compiled via Gemini Pro Deep Research and independently
 validated against primary sources before use (see
 [Methodology & Data Validation Log](#methodology)):
 
@@ -54,7 +52,6 @@ validated against primary sources before use (see
 |---|---|---|
 | `TOP_SCORERS` | `top_scorers_1994_2026.csv` | Each edition's top scorer + club-season form immediately before the tournament (1994-2026) |
 | `TEAM_RESULTS` | `team_results_1994_2026.csv` | Every team, every edition, with confederation and furthest stage reached (296 rows, 1994-2026) |
-| `NATURALIZED_PLAYERS` | `naturalized_players_1994_2026.csv` | 36 documented, press-covered cases of naturalized players who were key contributors |
 
 ## Key Findings
 
@@ -69,10 +66,6 @@ validated against primary sources before use (see
   best-ever results (South Korea's 2002 semifinal, Morocco's 2022 semifinal) happened
   in editions with *fewer* slots than 2026 — where, despite the largest allocation in
   history, neither matched that ceiling.
-- **Naturalization reads as a targeted fix, not a trend.** 27 of the 36 documented
-  cases are defenders or attackers solving one specific positional problem for their
-  adopted team (e.g., Aymeric Laporte anchoring Spain's 2026 title-winning defense),
-  not evidence of squads broadly rebuilt around naturalized players.
 
 Full analysis, SQL, and charts: [`notebooks/world_cup_data_analysis.ipynb`](notebooks/world_cup_data_analysis.ipynb)
 
@@ -84,8 +77,7 @@ world-cup-data-analysis/
 │   └── banner.png                       # README banner infographic
 ├── data/
 │   ├── top_scorers_1994_2026.csv        # Each edition's top scorer + club form
-│   ├── team_results_1994_2026.csv       # Every team, every edition (296 rows)
-│   └── naturalized_players_1994_2026.csv # 36 documented naturalization cases
+│   └── team_results_1994_2026.csv       # Every team, every edition (296 rows)
 ├── src/
 │   └── db_utils.py                      # Reusable DB connection + query helper functions
 ├── sql/
@@ -125,22 +117,16 @@ The notebook loads the CSVs from `data/` into an in-memory SQLite database via
 - Subqueries and derived tables — joining a per-edition slot-count subquery with a
   per-edition ceiling subquery for the CAF/AFC question
 - `CASE` statements for data normalization — mapping free-text stage labels onto a
-  consistent ordinal rank scale, and bucketing free-text position descriptions into
-  position groups for the naturalization question
+  consistent ordinal rank scale
 
 ## Methodology & Data Validation Log <a id="methodology"></a>
 
-- **Compiled via Gemini Pro Deep Research**, using three schema-first prompts (exact
-  CSV column headers specified up front, explicit source-citation and
-  confidence-flagging instructions, and a strict definition of "naturalized" —
-  residency/civil-process naturalization only, excluding ancestry-based eligibility
-  such as Miroslav Klose's German repatriation or Morocco's diaspora players).
+- **Compiled via Gemini Pro Deep Research**, using schema-first prompts (exact CSV
+  column headers specified up front, explicit source-citation and
+  confidence-flagging instructions).
 - **Independently validated before use, not taken at face value** — every dataset was
   cross-checked against primary sources before being loaded into this project. See the
-  correction log below for the two concrete errors this caught.
-- **`NATURALIZED_PLAYERS` is a curated set of the most-documented, press-covered
-  cases, not an exhaustive squad census** — deliberately scoped down from an
-  unreliable full count to a smaller set of verifiable cases.
+  correction log below for the one concrete error this caught.
 - **2026 data:** tournament complete as of **July 20, 2026** — all results final,
   including the Spain 1-0 Argentina final and the England 6-4 France third-place match.
 - **Language note:** team names, stage labels, and notes in the datasets are in
@@ -149,18 +135,26 @@ The notebook loads the CSVs from `data/` into an in-memory SQLite database via
 
 ### Correction log
 
-Two real errors were found and fixed during this project, each caught by a different
-validation method — a deliberate part of the portfolio story, not an incidental detail:
+One real error was found and fixed during this project — a deliberate part of the
+portfolio story, not an incidental detail:
 
 1. **Two non-qualified teams in the 2026 `TEAM_RESULTS` data.** The Deep Research
    output included Cameroon and Costa Rica as 2026 participants, which would have made
    the tournament 50 teams instead of 48. A row-count check flagged the discrepancy;
    cross-referencing Wikipedia's "List of team base camps" table (one row per
    actually-qualified team) confirmed both were false inclusions and removed them.
-2. **A player who never played the tournament.** The naturalized-players research
-   listed Robin Le Normand as a starting centre-back for Spain's actual 2026 squad. A
-   targeted web search confirmed he was not selected for the World Cup squad (only for
-   Euro 2024) — the row was removed.
+
+### A question that didn't survive scrutiny
+
+An earlier version of this project included a fourth question — whether naturalized
+players are used as a targeted fix for a specific squad need, versus generic
+reinforcement. After building it out, the underlying data (a free-text description of
+each player's on-field role) turned out not to support that claim: mentioning a
+player's position is not evidence of *why* a federation naturalized them, and only 2 of
+36 documented cases actually stated an identified need being filled. Rather than keep a
+metric that doesn't hold up, that question was dropped. Recognizing when a question
+doesn't survive scrutiny — and saying so — is part of the same validation discipline
+that produced the correction above.
 
 This project intentionally does **not** rely on a third-party pre-built dataset —
 the data was compiled and structured specifically for this analysis, which is also
