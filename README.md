@@ -1,4 +1,4 @@
-# World Cup Data Analysis (1994-2026): 3 Questions
+# World Cup Data Analysis (1994-2026)
 
 ![Project banner](assets/banner.png)
 
