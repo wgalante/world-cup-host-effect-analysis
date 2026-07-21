@@ -10,8 +10,7 @@
 
 A SQL + Python data analysis project asking three specific, less obvious questions
 about the last nine World Cups (1994-2026) — the span between the two tournaments
-held in the USA. No "does hosting help" here: this project skips the obvious question
-and goes after things that are more interesting and less asked.
+held in the USA.
 
 Built on SQL techniques from IBM's **"Databases and SQL for Data Science with
 Python"** course (Coursera / IBM Data Science Professional Certificate), applied to
